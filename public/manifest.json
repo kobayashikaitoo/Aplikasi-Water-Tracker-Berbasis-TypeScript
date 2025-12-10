@@ -1,0 +1,16 @@
+{
+  "name": "Water Tracker App",
+  "short_name": "WaterTrack",
+  "description": "Track your daily hydration goals",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#171717",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

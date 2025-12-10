@@ -2,25 +2,66 @@
   "name": "water-tracker",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "main": "main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dev:electron": "concurrently -k \"npm run dev\" \"wait-on tcp:3000 && electron .\"",
+    "build:electron": "next build",
+    "dist": "npm run build:electron && electron-builder"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "electron-serve": "^3.0.0",
+    "framer-motion": "^12.23.25",
+    "idb-keyval": "^6.2.2",
+    "lucide-react": "^0.556.0",
     "next": "16.0.8",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "recharts": "^3.5.1",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0",
+    "use-sound": "^5.0.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.8",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "com.hydroflow.app",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "public/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "files": [
+      "out/**/*",
+      "main.js",
+      "package.json"
+    ]
   }
 }
