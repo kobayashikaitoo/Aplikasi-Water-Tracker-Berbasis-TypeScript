@@ -94,21 +94,17 @@ export const useWaterStore = create<WaterState>()(
           targetMl: target,
         });
 
-        // Optimization: Do NOT auto-populate reminders. User wants manual control.
-        // If we wanted to keep them, we'd uncomment the mapping logic.
-        /* 
         const newReminders: Reminder[] = schedule.times.map(t => ({
           id: Math.random().toString(36).substr(2, 9),
           time: t,
           enabled: true
         }));
-        */
 
         set((state) => ({
           userData: { ...data, hasOnboarded: true },
           dailyTarget: target,
-          // Keep existing reminders if any, don't overwrite with auto-generated ones
-          // reminders: newReminders -- DISABLED
+          // Overwrite reminders with new schedule
+          reminders: newReminders
         }));
       },
 

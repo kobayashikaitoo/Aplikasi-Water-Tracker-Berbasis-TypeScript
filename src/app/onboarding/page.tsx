@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useWaterStore } from "@/store/useWaterStore";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { calculateDailyWaterTarget } from "@/lib/water-calculations";
 import OnboardingLayout from "@/components/OnboardingLayout";
 import { Sun, Moon } from "lucide-react";
 
@@ -28,11 +29,11 @@ export default function OnboardingPage() {
     { id: 4, label: "Tidur Malam" },
   ];
 
-  // Calculate target locally
-  const calculatedTarget = Math.max(
-    formData.weightKg * 35,
-    1500
-  );
+  // Calculate target locally using shared logic
+  const calculatedTarget = calculateDailyWaterTarget({
+    weightKg: formData.weightKg,
+    sex: formData.sex
+  });
 
   const handleNext = () => {
     if (step < 4) {

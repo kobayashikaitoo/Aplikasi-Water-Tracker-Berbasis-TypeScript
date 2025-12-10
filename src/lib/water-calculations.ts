@@ -53,24 +53,27 @@ export function generateReminderSchedule({
   // If awake time is unreasonably small (e.g. < 4 hours), default to a standard day or warn
   // keeping it simple for now.
 
-  const intervalMinutes = awakeMinutes / reminders;
-  const mlPerReminder = Math.round(targetMl / reminders);
+  // Fixed interval of 90 minutes
+  const INTERVAL_MINUTES = 90;
 
   const times: string[] = [];
-  for (let i = 0; i < reminders; i++) {
-    const reminderMinutes = wakeTotalMinutes + (i + 1) * intervalMinutes; // Start 1 interval after wake
-    // Or start AT wake time? Prompt says "Distribute ... between wake-sleep".
-    // Usually reminders start a bit after waking or spread evenly.
-    // Let's do Standard distribution: Start at wake + interval.
+  let currentMinutes = wakeTotalMinutes + INTERVAL_MINUTES;
 
+  while (currentMinutes < sleepTotalMinutes) {
     // Normalize to 24h
-    let normalizedMinutes = Math.floor(reminderMinutes);
+    let normalizedMinutes = Math.floor(currentMinutes);
     if (normalizedMinutes >= 24 * 60) normalizedMinutes -= 24 * 60;
 
     const h = Math.floor(normalizedMinutes / 60);
     const m = normalizedMinutes % 60;
     times.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+
+    currentMinutes += INTERVAL_MINUTES;
   }
+
+  // Calculate ML per reminder based on actual number of reminders generated
+  const actualRemindersCount = times.length || 1; // avoid divide by zero
+  const mlPerReminder = Math.round(targetMl / actualRemindersCount);
 
   return { times, mlPerReminder };
 }
