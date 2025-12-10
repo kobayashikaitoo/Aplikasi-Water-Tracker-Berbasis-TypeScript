@@ -61,7 +61,9 @@ export default function HistoryPage() {
       let totalAmount = history.filter(h => h.date.startsWith(monthKey)).reduce((acc, curr) => acc + curr.amount, 0);
 
       if (isCurrentMonth) totalAmount += todayAmount;
-      months.push({ label: monthLabel, date: monthKey, amount: totalAmount, isToday: isCurrentMonth });
+      // Estimate target for month? Or just use dailyTarget * days? For simplicity, using dailyTarget * 30 or similar is complex.
+      // For yearly view, we aren't using the gray logic so we can just pass 0 or current dailyTarget as placeholder.
+      months.push({ label: monthLabel, date: monthKey, amount: totalAmount, target: dailyTarget * 30, isToday: isCurrentMonth });
     }
     return months;
   }, [history, todayAmount]);
