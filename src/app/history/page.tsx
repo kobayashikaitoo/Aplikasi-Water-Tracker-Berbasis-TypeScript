@@ -31,19 +31,35 @@ export default function HistoryPage() {
   const monthlyData = useMemo(() => {
     const days = [];
     const today = new Date();
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
-      const dayLabel = d.getDate().toString();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0-indexed
+
+    // Get total days in current month (e.g., 31 for Dec)
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      // Construct date: YYYY-MM-DD (local time)
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const dayLabel = day.toString();
 
       const historyRecord = history.find(h => h.date === dateStr);
-      let amount = (i === 0) ? todayAmount : (historyRecord?.amount || 0);
 
-      days.push({ label: dayLabel, date: dateStr, amount, target: historyRecord?.target || dailyTarget, isToday: i === 0 });
+      // Determine if this day is "Today"
+      const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+
+      // If it's today, prioritize todayAmount. If historical, use history record.
+      let amount = isToday ? todayAmount : (historyRecord?.amount || 0);
+
+      days.push({
+        label: dayLabel,
+        date: dateStr,
+        amount,
+        target: historyRecord?.target || dailyTarget,
+        isToday
+      });
     }
     return days;
-  }, [history, todayAmount]);
+  }, [history, todayAmount, dailyTarget]);
 
   const yearlyData = useMemo(() => {
     const months = [];
@@ -85,7 +101,8 @@ export default function HistoryPage() {
 
 
   const data = period === 'weekly' ? weeklyData : period === 'monthly' ? monthlyData : yearlyData;
-  const chartTitle = period === 'weekly' ? 'Asupan Air Mingguan' : period === 'monthly' ? '30 Hari Terakhir' : 'Gambaran Tahunan';
+  const currentMonthName = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+  const chartTitle = period === 'weekly' ? 'Asupan Air Mingguan' : period === 'monthly' ? `Bulan ${currentMonthName}` : 'Gambaran Tahunan';
 
   const totalDrunk = history.reduce((acc, curr) => acc + curr.amount, 0) + todayAmount;
   const successDays = history.filter(d => d.amount >= d.target).length + (todayAmount >= dailyTarget ? 1 : 0);
