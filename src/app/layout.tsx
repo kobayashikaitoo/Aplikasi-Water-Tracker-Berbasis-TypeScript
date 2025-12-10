@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
 import NotificationManager from "@/components/NotificationManager";
 import { ServiceWorkerManager } from "@/components/ServiceWorkerManager";
+import ErrorSuppressor from "@/components/ErrorSuppressor";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={cn(inter.className, "bg-neutral-50 text-neutral-900 min-h-screen antialiased")}>
         <ServiceWorkerManager />
         <NotificationManager />
+        <ErrorSuppressor />
         {children}
         <Toaster position="top-center" richColors />
       </body>

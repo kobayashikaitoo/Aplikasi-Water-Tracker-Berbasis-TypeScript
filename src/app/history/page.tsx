@@ -122,7 +122,7 @@ export default function HistoryPage() {
               </div>
             </div>
 
-            <div className="flex-1 w-full min-h-[300px]">
+            <div className="flex-1 w-full min-h-[300px] h-[300px] relative">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} barSize={period === 'monthly' ? 12 : 32}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
