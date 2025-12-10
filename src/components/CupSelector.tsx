@@ -113,7 +113,10 @@ export default function CupSelector({ isOpen, onClose, selectedSize, onSelect }:
                           autoFocus
                           type="number"
                           value={customSize}
-                          onChange={(e) => setCustomSize(Number(e.target.value))}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            if (val >= 0) setCustomSize(val);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               onSelect(customSize);

@@ -213,7 +213,10 @@ export default function DesktopDashboard() {
                     <input
                       type="number"
                       value={manualAmount}
-                      onChange={(e) => setManualAmount(Number(e.target.value))}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        if (val >= 0) setManualAmount(val);
+                      }}
                       className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:border-blue-500 transition-colors text-center"
                     />
                   </div>
