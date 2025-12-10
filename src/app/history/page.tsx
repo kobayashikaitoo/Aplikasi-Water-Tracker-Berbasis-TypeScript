@@ -152,8 +152,11 @@ export default function HistoryPage() {
                       <Cell
                         key={`cell-${index}`}
                         fill={period === 'yearly'
-                          ? "#3b82f6"
-                          : (entry.isToday ? "#2563eb" : (entry.amount >= (entry.target || dailyTarget) ? "#60a5fa" : "#cbd5e1")) // Changed gray to darker gray for visibility
+                          ? "#3b82f6" // Yearly always blue
+                          : (entry.amount >= (entry.target || dailyTarget)
+                            ? (entry.isToday ? "#2563eb" : "#60a5fa") // Met: Dark blue (today) or Blue (others)
+                            : (entry.isToday ? "#94a3b8" : "#cbd5e1")  // Not Met: Dark Gray (today) or Light Gray (others)
+                          )
                         }
                       />
                     ))}
