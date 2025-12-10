@@ -48,14 +48,19 @@ export default function HistoryPage() {
   const yearlyData = useMemo(() => {
     const months = [];
     const today = new Date();
-    const currentMonthKey = today.toISOString().slice(0, 7); // YYYY-MM
+    // Use Local Time construction (YYYY-MM)
+    const currentMonthKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
     for (let i = 11; i >= 0; i--) {
       const d = new Date(today);
       d.setMonth(today.getMonth() - i);
-      d.setDate(1); // Set to 1st to avoid month rolling issues
-      const monthKey = d.toISOString().slice(0, 7);
+      d.setDate(1);
+
+      const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       const monthLabel = d.toLocaleDateString('id-ID', { month: 'short' });
+
+      // Calculate days in this specific month
+      const daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
 
       // Sum history for this month
       let totalAmount = history
@@ -71,7 +76,7 @@ export default function HistoryPage() {
         label: monthLabel,
         date: monthKey,
         amount: totalAmount,
-        target: dailyTarget * 30, // Estimasi target sebulan
+        target: dailyTarget * daysInMonth, // Accurate monthly target
         isToday: monthKey === currentMonthKey
       });
     }
@@ -161,12 +166,9 @@ export default function HistoryPage() {
                     {data.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={period === 'yearly'
-                          ? "#3b82f6" // Yearly always blue
-                          : (entry.amount >= (entry.target || dailyTarget)
-                            ? (entry.isToday ? "#2563eb" : "#60a5fa") // Met: Dark blue (today) or Blue (others)
-                            : (entry.isToday ? "#94a3b8" : "#cbd5e1")  // Not Met: Dark Gray (today) or Light Gray (others)
-                          )
+                        fill={entry.amount >= (entry.target || dailyTarget)
+                          ? (entry.isToday ? "#2563eb" : "#60a5fa") // Met: Dark blue (today) or Blue (others)
+                          : (entry.isToday ? "#94a3b8" : "#cbd5e1")  // Not Met: Dark Gray (today) or Light Gray (others)
                         }
                       />
                     ))}

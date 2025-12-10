@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
@@ -7,7 +7,7 @@ import NotificationManager from "@/components/NotificationManager";
 import { ServiceWorkerManager } from "@/components/ServiceWorkerManager";
 import ErrorSuppressor from "@/components/ErrorSuppressor";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Water Tracker",
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "bg-neutral-50 text-neutral-900 min-h-screen antialiased")}>
+      <body className={cn("font-sans", "bg-neutral-50 text-neutral-900 min-h-screen antialiased")}>
         <ServiceWorkerManager />
         <NotificationManager />
         <ErrorSuppressor />
