@@ -23,7 +23,7 @@ export default function HistoryPage() {
       const historyRecord = history.find(h => h.date === dateStr);
       let amount = (i === 0) ? todayAmount : (historyRecord?.amount || 0);
 
-      days.push({ label: dayName, date: dateStr, amount, isToday: i === 0 });
+      days.push({ label: dayName, date: dateStr, amount, target: historyRecord?.target || dailyTarget, isToday: i === 0 });
     }
     return days;
   }, [history, todayAmount]);
@@ -40,7 +40,7 @@ export default function HistoryPage() {
       const historyRecord = history.find(h => h.date === dateStr);
       let amount = (i === 0) ? todayAmount : (historyRecord?.amount || 0);
 
-      days.push({ label: dayLabel, date: dateStr, amount, isToday: i === 0 });
+      days.push({ label: dayLabel, date: dateStr, amount, target: historyRecord?.target || dailyTarget, isToday: i === 0 });
     }
     return days;
   }, [history, todayAmount]);
@@ -151,7 +151,7 @@ export default function HistoryPage() {
                         key={`cell-${index}`}
                         fill={period === 'yearly'
                           ? "#3b82f6"
-                          : (entry.isToday ? "#2563eb" : (entry.amount >= dailyTarget ? "#60a5fa" : "#e2e8f0"))
+                          : (entry.isToday ? "#2563eb" : (entry.amount >= (entry.target || dailyTarget) ? "#60a5fa" : "#cbd5e1")) // Changed gray to darker gray for visibility
                         }
                       />
                     ))}
