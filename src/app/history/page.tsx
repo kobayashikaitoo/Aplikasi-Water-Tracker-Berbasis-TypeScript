@@ -48,25 +48,35 @@ export default function HistoryPage() {
   const yearlyData = useMemo(() => {
     const months = [];
     const today = new Date();
+    const currentMonthKey = today.toISOString().slice(0, 7); // YYYY-MM
+
     for (let i = 11; i >= 0; i--) {
       const d = new Date(today);
       d.setMonth(today.getMonth() - i);
-      d.setDate(1);
-      const monthKey = d.toISOString().split('T')[0].substring(0, 7);
+      d.setDate(1); // Set to 1st to avoid month rolling issues
+      const monthKey = d.toISOString().slice(0, 7);
       const monthLabel = d.toLocaleDateString('id-ID', { month: 'short' });
 
-      const currentMonthStr = new Date().toISOString().split('T')[0].substring(0, 7);
-      const isCurrentMonth = monthKey === currentMonthStr;
+      // Sum history for this month
+      let totalAmount = history
+        .filter(h => h.date.startsWith(monthKey))
+        .reduce((acc, curr) => acc + curr.amount, 0);
 
-      let totalAmount = history.filter(h => h.date.startsWith(monthKey)).reduce((acc, curr) => acc + curr.amount, 0);
+      // Add today's amount if this is the current month
+      if (monthKey === currentMonthKey) {
+        totalAmount += todayAmount;
+      }
 
-      if (isCurrentMonth) totalAmount += todayAmount;
-      // Estimate target for month? Or just use dailyTarget * days? For simplicity, using dailyTarget * 30 or similar is complex.
-      // For yearly view, we aren't using the gray logic so we can just pass 0 or current dailyTarget as placeholder.
-      months.push({ label: monthLabel, date: monthKey, amount: totalAmount, target: dailyTarget * 30, isToday: isCurrentMonth });
+      months.push({
+        label: monthLabel,
+        date: monthKey,
+        amount: totalAmount,
+        target: dailyTarget * 30, // Estimasi target sebulan
+        isToday: monthKey === currentMonthKey
+      });
     }
     return months;
-  }, [history, todayAmount]);
+  }, [history, todayAmount, dailyTarget]);
 
 
   const data = period === 'weekly' ? weeklyData : period === 'monthly' ? monthlyData : yearlyData;

@@ -30,7 +30,7 @@ Pastikan [Node.js](https://nodejs.org/) sudah terinstall di komputer Anda.
 
 1.  **Clone / Download Project**
     ```bash
-    git clone https://github.com/username/water-tracker.git
+    git clone https://github.com/kobayashikaitoo/Aplikasi-Water-Tracker-Berbasis-TypeScript.git
     cd water-tracker
     ```
 

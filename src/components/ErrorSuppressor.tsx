@@ -9,9 +9,11 @@ export default function ErrorSuppressor() {
 
     console.error = (...args) => {
       if (typeof args[0] === 'string') {
-        // Suppress Next.js 404 resource errors
+        // Suppress Next.js 404 resource errors (including app:// protocol)
         if (args[0].includes('__next') && args[0].includes('404')) return;
         if (args[0].includes('Failed to load resource')) return;
+        if (args[0].includes('app://')) return; // Catch electron protocol errors
+        if (args[0].includes('file://')) return;
         // Suppress Recharts defaultProps warning if any (common in React 18 strict mode)
         if (args[0].includes('defaultProps')) return;
       }
