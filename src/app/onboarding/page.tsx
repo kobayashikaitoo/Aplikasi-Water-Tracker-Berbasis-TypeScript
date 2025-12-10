@@ -129,7 +129,10 @@ export default function OnboardingPage() {
                 <input
                   type="number"
                   value={formData.weightKg}
-                  onChange={(e) => setFormData({ ...formData, weightKg: Number(e.target.value) })}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (val >= 0) setFormData({ ...formData, weightKg: val });
+                  }}
                   className="text-7xl font-black text-slate-800 w-full text-center bg-transparent outline-none focus:scale-110 transition-transform"
                 />
                 <span className="text-lg font-bold text-slate-400 mt-2">kg</span>

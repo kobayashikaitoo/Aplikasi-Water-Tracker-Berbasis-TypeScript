@@ -210,7 +210,10 @@ export default function SettingsPage() {
                 <input
                   type="number"
                   value={form.weightKg}
-                  onChange={e => setForm({ ...form, weightKg: Number(e.target.value) })}
+                  onChange={e => {
+                    const val = Number(e.target.value);
+                    if (val >= 0) setForm({ ...form, weightKg: val });
+                  }}
                   className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-3 py-2 font-bold text-slate-700 outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
